@@ -4,9 +4,13 @@ let newTaskRef = document.querySelector('#newTask')
 let skeletonRef = document.querySelector('#skeleton')
 let ulTarefasRef = document.querySelector('.tarefas-pendentes')
 let novaTarefaRef = document.querySelector('#novaTarea')
-
+let requestHeaders = {
+    "Content-Type": "application/json",
+    Authorization: localStorage.getItem("token")
+}
 let taskList = []
 
+//faz o logout da pagina de tarefas
 function logOutUser() {
     localStorage.clear();
     window.location.href = "./index.html";
@@ -14,56 +18,75 @@ function logOutUser() {
 
 function taskRender() {
 
-    for (const task of taskList) {
-
-        ulTarefasRef.innerHTML += `
-        <li class="tarefa">
-        <div class="not-done"></div>
-        <div class="descricao">
-          <p class="nome">${task.description}</p>
-          <p class="timestamp">${task.createdAt}</p>
-        </div>
-      </li>
-        
-        `
-
+    for (const task of taskList.reverse()) {
+        const dataCreat = new Date(task.createdAt)
+        const dataFormatada = dataCreat.toLocaleDateString(
+            'pt-br',
+            {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+                
+            }
+        )
+            ulTarefasRef.innerHTML += `
+            <li class="tarefa">
+            <div class="not-done"></div>
+            <div class="descricao">
+              <p class="nome">${task.description}</p>
+              <p class="timestamp">${dataFormatada}</p>
+              <p id="closeApp" onclick="excluir(${task.id})">Excluir</p>
+            </div>
+          </li>`    
     }
-
+    
 }
 
 function creatTask() {
+
+    let newTask = {
+        description: novaTarefaRef.value,
+        completed: false
+    }
+    
+    let requestConfigurationPost = {
+        method: "POST",
+        body: JSON.stringify(newTask),
+        headers: requestHeaders
+    }
+
     fetch(
         "https://ctd-todo-api.herokuapp.com/v1/tasks",
         requestConfigurationPost
     ).then(response => {
-        response.json().then(data => {
-
-            console.log(data)
-
-        });
+        response.json()
+        
     });
-}
-
-let requestHeaders = {
-    "Content-Type": "application/json",
-    Authorization: localStorage.getItem("token")
+   
 }
 
 let requestConfigurationGet = {
     headers: requestHeaders
 };
 
-let newTask = {
-    description: novaTarefaRef.value,
-    completed: false
+
+
+function excluir(id){
+
+    let settingDelete = {
+        method: "DELETE",
+        headers: requestHeaders
+    }
+
+    fetch(`https://ctd-todo-api.herokuapp.com/v1/tasks/${id}`, settingDelete).then(response =>{
+
+        response.json()
+        location.reload()
+        alert('Tarefa excluida com sucesso')
+           
+    })
+
 }
-
-let requestConfigurationPost = {
-    method: "POST",
-    body: JSON.stringify(newTask),
-    headers: requestHeaders
-};
-
 
 fetch(
     "https://ctd-todo-api.herokuapp.com/v1/users/getMe",
@@ -71,37 +94,38 @@ fetch(
 ).then(response => {
     response.json().then(data => {
         userNameRef.innerHTML = data.firstName
-        console.log(data)
-
     });
 });
 
-fetch(
-    "https://ctd-todo-api.herokuapp.com/v1/tasks",
-    requestConfigurationGet
-).then(response => {
-    response.json().then(data => {
+atualizar()
+function atualizar(){
 
-        //console.log(data)
-
-        for (const task of data) {
-
-            taskList.push(task)
-
-        }
-        console.log(taskList)
-
-        skeletonRef.style.display = "none";
-        taskRender()
-        
+    fetch(
+        "https://ctd-todo-api.herokuapp.com/v1/tasks",
+        requestConfigurationGet
+    ).then(response => {
+        response.json().then(data => {
+    
+            //console.log(data)
+    
+            for (const task of data) {
+    
+                taskList.push(task)
+    
+            }
+            console.log(taskList)
+    
+            skeletonRef.style.display = "none";
+            taskRender()
+            
+        });
     });
-});
 
-
+}
+  
 newTaskRef.addEventListener('click', event => {
 
-    event.preventDefault()
-
+    //event.preventDefault()
     creatTask()
     
 })
