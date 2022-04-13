@@ -21,6 +21,8 @@ function logOutUser() {
 }
 
 function taskRender() {
+    ulTarefasRef.innerHTML = ""
+    ulTarefasTerminadasRef.innerHTML = ""
 
     for (const task of taskList) {
         const dataCreat = new Date(task.createdAt)
@@ -38,9 +40,11 @@ function taskRender() {
             <div class="not-done" onclick="taskCompleted(${task.id})"></div>
             <div class="descricao">
               <p class="nome">${task.description}</p>
-              <p class="timestamp">Criada em: ${dataFormatada}</p>
-              <p id="closeApp" onclick="EditTarefa(${task.id})">Editar</p>
-              <p id="closeApp" onclick="excluir(${task.id})">Excluir</p>
+              <div class="right">
+                <p class="timestamp">Criada em: ${dataFormatada}</p>
+                <p id="EditButtun" onclick="EditTarefa(${task.id})">Editar</p>
+                <p id="closeApp" onclick="excluir(${task.id})">Excluir</p>
+              </div>
             </div>
           </li>`    
     }
@@ -84,7 +88,11 @@ function creatTask() {
         "https://ctd-todo-api.herokuapp.com/v1/tasks",
         requestConfigurationPost
     ).then(response => {
-        response.json()
+        response.json().then(data =>{
+            taskList.push(data)
+            taskRender()
+        })
+        
         
     });
    
@@ -132,6 +140,7 @@ function taskCompleted(id) {
     ).then(response => {
         response.json()
         
+        
     });
     location.reload()
     alert('Parabéns por concluir a tarefa!')
@@ -140,27 +149,35 @@ function taskCompleted(id) {
 
 
 function EditTarefa(id) {
+    let edit = prompt('Editar tarefa')
 
-    let EditTask = {
-        description: novaTarefaRef.value,
-        completed: false
+    if(edit){
+
+        let EditTask = {
+            description: edit,
+            completed: false
+        }
+        
+        let requestConfigurationPut = {
+            method: "PUT",
+            body: JSON.stringify(EditTask),
+            headers: requestHeaders
+        }
+    
+        fetch(
+            `https://ctd-todo-api.herokuapp.com/v1/tasks/${id}`,
+            requestConfigurationPut
+        ).then(response => {
+            response.json()
+            alert('Tarefa Editada Com sucesso!')
+            location.reload()
+            
+        });
+
     }
     
-    let requestConfigurationPut = {
-        method: "PUT",
-        body: JSON.stringify(EditTask),
-        headers: requestHeaders
-    }
-
-    fetch(
-        `https://ctd-todo-api.herokuapp.com/v1/tasks/${id}`,
-        requestConfigurationPut
-    ).then(response => {
-        response.json()
-        
-    });
-    location.reload()
-    alert('Tarefa Editada Com sucesso!')
+    
+    
    
 }
 
@@ -171,19 +188,26 @@ let requestConfigurationGet = {
 
 
 function excluir(id){
+    if(confirm("Deseja realmente excluir a tarefa?")){
 
-    let settingDelete = {
-        method: "DELETE",
-        headers: requestHeaders
+        let settingDelete = {
+            method: "DELETE",
+            headers: requestHeaders
+        }
+    
+        fetch(`https://ctd-todo-api.herokuapp.com/v1/tasks/${id}`, settingDelete).then(response =>{
+    
+            response.json().then(
+                
+            )
+            
+            location.reload()
+            
+               
+        })
+
     }
 
-    fetch(`https://ctd-todo-api.herokuapp.com/v1/tasks/${id}`, settingDelete).then(response =>{
-
-        response.json()
-        location.reload()
-        alert('Tarefa excluida com sucesso')
-           
-    })
 
 }
 
@@ -198,6 +222,7 @@ fetch(
 
 atualizar()
 function atualizar(){
+    
 
     fetch(
         "https://ctd-todo-api.herokuapp.com/v1/tasks",
@@ -225,8 +250,10 @@ function atualizar(){
   
 newTaskRef.addEventListener('click', event => {
 
-    //event.preventDefault()
+    event.preventDefault()
     creatTask()
+    novaTarefaRef.value = ""
+    
     
 })
 

@@ -45,6 +45,15 @@ a {
   padding: 5px 10px;
   cursor: pointer;
 }
+#EditButtun{
+  margin-left: 15px;
+  font-size: .7em;
+  background-color: rgb(88, 144, 218);
+  color: white;
+  border-radius: 50vh;
+  padding: 5px 10px;
+  cursor: pointer;
+}
 
 /* Nova tarefa ----------------------------------------------------------- */
 
@@ -171,6 +180,11 @@ a {
   background-color: white;
   padding: 1em 2em;
   box-shadow: 2px 2px 5px lightgrey;
+}
+
+.tarefa .right {
+  display: flex;
+    
 }
 
 .tarefa .nome {
