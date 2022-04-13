@@ -148,9 +148,8 @@ function taskCompleted(id) {
 }
 
 
-function EditTarefa(id) {
-    let edit = prompt('Editar tarefa')
-
+function EditTarefa(idValue) {
+    let edit = prompt('Editar tarefa')   
     if(edit){
 
         let EditTask = {
@@ -165,12 +164,16 @@ function EditTarefa(id) {
         }
     
         fetch(
-            `https://ctd-todo-api.herokuapp.com/v1/tasks/${id}`,
+            `https://ctd-todo-api.herokuapp.com/v1/tasks/${idValue}`,
             requestConfigurationPut
         ).then(response => {
-            response.json()
-            alert('Tarefa Editada Com sucesso!')
-            location.reload()
+            response.json().then(data=>{
+               
+                alert('Tarefa Editada Com sucesso!')
+                location.reload()
+            })
+            
+            
             
         });
 
@@ -187,27 +190,24 @@ let requestConfigurationGet = {
 
 
 
-function excluir(id){
+function excluir(idValue){
     if(confirm("Deseja realmente excluir a tarefa?")){
-
         let settingDelete = {
             method: "DELETE",
             headers: requestHeaders
         }
     
-        fetch(`https://ctd-todo-api.herokuapp.com/v1/tasks/${id}`, settingDelete).then(response =>{
+        fetch(`https://ctd-todo-api.herokuapp.com/v1/tasks/${idValue}`, settingDelete).then(response =>{
     
-            response.json().then(
+            response.json().then(data =>{      
                 
-            )
-            
-            location.reload()
-            
-               
+                taskList = taskList.filter(i =>{return i["id"] !== idValue})
+                taskRender()
+            })
+    
         })
 
-    }
-
+    }  
 
 }
 
@@ -229,10 +229,8 @@ function atualizar(){
         requestConfigurationGet
     ).then(response => {
         response.json().then(data => {
-    
-            //console.log(data)
-    
-            for (const task of data) {
+            
+                for (const task of data) {
                 
                 if(task.completed){
                     tasksCompletedList.push(task)
@@ -241,9 +239,9 @@ function atualizar(){
             }
                 
             skeletonRef.style.display = "none";
-            taskRender()
-            
+            taskRender()            
         });
+        taskRender()
     });
 
 }
