@@ -19,8 +19,30 @@ function logOutUser() {
     localStorage.clear();
     window.location.href = "./index.html";
 }
-
+function atualizararray(){
+    taskList = []
+    tasksCompletedList = []
+    fetch(
+        "https://ctd-todo-api.herokuapp.com/v1/tasks",
+        requestConfigurationGet
+    ).then(response => {
+        response.json().then(data => {
+            
+                for (const task of data) {
+                
+                if(task.completed){
+                    tasksCompletedList.push(task)
+                }else taskList.push(task)
+                
+            }  
+            taskRender()                    
+        });
+       
+    });
+}
 function taskRender() {
+   
+    
     ulTarefasRef.innerHTML = ""
     ulTarefasTerminadasRef.innerHTML = ""
 
@@ -115,10 +137,11 @@ function taskCompletedReturn(id) {
         requestConfigurationPut
     ).then(response => {
         response.json()
-        
+        atualizararray()
+        alert('Tarefa de volta para pendentes')
     });
-    location.reload()
-    alert('Tarefa de volta para pendentes')
+    //location.reload()
+    
    
 }
 function taskCompleted(id) {
@@ -139,11 +162,12 @@ function taskCompleted(id) {
         requestConfigurationPut
     ).then(response => {
         response.json()
-        
+        atualizararray()
+        alert('Parabéns por concluir a tarefa!')
         
     });
-    location.reload()
-    alert('Parabéns por concluir a tarefa!')
+    //location.reload()
+    
    
 }
 
@@ -168,9 +192,10 @@ function EditTarefa(idValue) {
             requestConfigurationPut
         ).then(response => {
             response.json().then(data=>{
-               
+                
+                atualizararray()
                 alert('Tarefa Editada Com sucesso!')
-                location.reload()
+                //location.reload()
             })
             
             
@@ -201,8 +226,8 @@ function excluir(idValue){
     
             response.json().then(data =>{      
                 
-                taskList = taskList.filter(i =>{return i["id"] !== idValue})
-                taskRender()
+                //taskList = taskList.filter(i =>{return i["id"] !== idValue})
+                atualizararray()
             })
     
         })
