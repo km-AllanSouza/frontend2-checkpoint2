@@ -5,6 +5,7 @@ let skeletonRef = document.querySelector('#skeleton')
 let ulTarefasRef = document.querySelector('.tarefas-pendentes')
 let ulTarefasTerminadasRef = document.querySelector('.tarefas-terminadas')
 let novaTarefaRef = document.querySelector('#novaTarea')
+let imagem = document.querySelector('.user-image')
 let requestHeaders = {
     "Content-Type": "application/json",
     Authorization: localStorage.getItem("token")
@@ -58,14 +59,14 @@ function taskRender() {
             }
         )
             ulTarefasRef.innerHTML += `
-            <li class="tarefa">
+            <li " class="tarefa">
             <div class="not-done" onclick="taskCompleted(${task.id})"></div>
             <div class="descricao">
               <p class="nome">${task.description}</p>
               <div class="right">
                 <p class="timestamp">Criada em: ${dataFormatada}</p>
                 <p id="EditButtun" onclick="EditTarefa(${task.id})">Editar</p>
-                <p id="closeApp" onclick="excluir(${task.id})">Excluir</p>
+                <p id="delete-buttum" onclick="excluir(${task.id})">Excluir</p>
               </div>
             </div>
           </li>`    
@@ -82,12 +83,13 @@ function taskRender() {
             }
         )
             ulTarefasTerminadasRef.innerHTML += `
-          <li class="tarefa">
+          <li " class="tarefa">
             <div class="not-done" onclick="taskCompletedReturn(${task.id})"></div>
             <div class="descricao">
               <p class="nome">${task.description}</p>
               <p class="timestamp">Criada em: ${dataFormatada}</p>
             </div>
+            <img src="https://img.icons8.com/ios-glyphs/344/fa314a/trash--v1.png" class="delete-image" onclick="excluir(${task.id})">
           </li>`        
     }
     
@@ -138,7 +140,14 @@ function taskCompletedReturn(id) {
     ).then(response => {
         response.json()
         atualizararray()
-        alert('Tarefa de volta para pendentes')
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Tarefa de volta a lista de pendencias!',
+            showConfirmButton: false,
+            timer: 800
+          })
+        //alert('Tarefa de volta para pendentes')
     });
     //location.reload()
     
@@ -163,46 +172,68 @@ function taskCompleted(id) {
     ).then(response => {
         response.json()
         atualizararray()
-        alert('Parabéns por concluir a tarefa!')
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Parabéns por concluir a tarefa!',
+            showConfirmButton: false,
+            timer: 800
+          })
+        //alert('Parabéns por concluir a tarefa!')
         
     });
-    //location.reload()
     
    
 }
 
 
 function EditTarefa(idValue) {
-    let edit = prompt('Editar tarefa')   
-    if(edit){
+    //let edit = prompt('Editar tarefa')
+     
+Swal.fire({
+    title: 'Substitua sua tarefa',
+    input: 'text',
+    inputAttributes: {
+      autocapitalize: 'off'
+    },
+    showCancelButton: true,
+    confirmButtonText: 'Substituir',
+    showLoaderOnConfirm: true,
+    preConfirm: (login) => {
+        console.log(login)
+        if(login){
 
-        let EditTask = {
-            description: edit,
-            completed: false
-        }
+            let EditTask = {
+                description: login,
+                completed: false
+            }
+            
+            let requestConfigurationPut = {
+                method: "PUT",
+                body: JSON.stringify(EditTask),
+                headers: requestHeaders
+            }
         
-        let requestConfigurationPut = {
-            method: "PUT",
-            body: JSON.stringify(EditTask),
-            headers: requestHeaders
-        }
-    
-        fetch(
-            `https://ctd-todo-api.herokuapp.com/v1/tasks/${idValue}`,
-            requestConfigurationPut
-        ).then(response => {
-            response.json().then(data=>{
+            fetch(
+                `https://ctd-todo-api.herokuapp.com/v1/tasks/${idValue}`,
+                requestConfigurationPut
+            ).then(response => {
+                response.json().then(data=>{
+                    
+                    atualizararray()
+                    //alert('Tarefa Editada Com sucesso!')
+                    //location.reload()
+                })
                 
-                atualizararray()
-                alert('Tarefa Editada Com sucesso!')
-                //location.reload()
-            })
-            
-            
-            
-        });
-
-    }
+                
+                
+            });
+    
+        }
+    },
+    
+  }) 
+    
     
     
     
@@ -216,25 +247,39 @@ let requestConfigurationGet = {
 
 
 function excluir(idValue){
-    if(confirm("Deseja realmente excluir a tarefa?")){
-        let settingDelete = {
-            method: "DELETE",
-            headers: requestHeaders
-        }
-    
-        fetch(`https://ctd-todo-api.herokuapp.com/v1/tasks/${idValue}`, settingDelete).then(response =>{
-    
-            response.json().then(data =>{      
-                
-                //taskList = taskList.filter(i =>{return i["id"] !== idValue})
-                atualizararray()
-            })
-    
-        })
+    //if(confirm("Deseja realmente excluir a tarefa?")){
+        Swal.fire({
+            title: 'Você tem certeza?',
+            text: "Não vai ser possivel reverter essa ação!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, delete!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                let settingDelete = {
+                    method: "DELETE",
+                    headers: requestHeaders
+                }
+            
+                fetch(`https://ctd-todo-api.herokuapp.com/v1/tasks/${idValue}`, settingDelete).then(response =>{
+            
+                    response.json().then(data =>{      
+                        
+                        //taskList = taskList.filter(i =>{return i["id"] !== idValue})
+                        atualizararray()
+                    })
+            
+                })
+              
+            }
+          })
+        
 
     }  
 
-}
+//}
 
 fetch(
     "https://ctd-todo-api.herokuapp.com/v1/users/getMe",
@@ -244,6 +289,16 @@ fetch(
         userNameRef.innerHTML = data.firstName
     });
 });
+
+    fetch('https://randomuser.me/api/')
+    .then(response => {
+        return response.json()
+    })
+    .then(data => {
+        console.log(data.results[0].picture.thumbnail)
+        imagem.setAttribute("src", data.results[0].picture.thumbnail)
+
+    })
 
 atualizar()
 function atualizar(){
@@ -270,12 +325,21 @@ function atualizar(){
     });
 
 }
+
   
 newTaskRef.addEventListener('click', event => {
-
+    
+event.preventDefault()
+if(novaTarefaRef.value == ""){
+    novaTarefaRef.focus()
+    Swal.fire('Digite a descrição da tarefa no campo nova tarefa')
+    
+}else{
     event.preventDefault()
     creatTask()
     novaTarefaRef.value = ""
+}
+    
     
     
 })

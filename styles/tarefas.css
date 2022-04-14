@@ -28,18 +28,34 @@ a {
 }
 
 .user-info .user-image {
-  height: 2em;
-  width: 2em;
+  height: 2.5em;
+  width: 2.5em;
   border-radius: 50%;
   background-color: white;
-  opacity: .4;
   margin-left: .7em;
 }
+.delete-image {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  background-color: white;
+  margin-left: .7em;
+}
+
 
 #closeApp{
   margin-left: 15px;
   font-size: .7em;
-  background-color: rgb(218, 88, 88);
+  background-color: rgb(250, 49, 74);
+  color: white;
+  border-radius: 50vh;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+#delete-buttum{
+  margin-left: 15px;
+  font-size: .7em;
+  background-color: rgb(250, 49, 74);
   color: white;
   border-radius: 50vh;
   padding: 5px 10px;
@@ -48,7 +64,7 @@ a {
 #EditButtun{
   margin-left: 15px;
   font-size: .7em;
-  background-color: rgb(88, 144, 218);
+  background-color: rgb(122, 147, 249);
   color: white;
   border-radius: 50vh;
   padding: 5px 10px;
