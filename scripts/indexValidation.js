@@ -1,32 +1,37 @@
 let emailReferencia = document.querySelector("#inputEmail");
 let senhaReferencia = document.querySelector("#inputPassword");
-let spanEmail = document.querySelector("#spanEmail");
+let spanEmailIndexRef = document.querySelector("#spanEmailIndex");
 let spanSenha = document.querySelector("#spanSenha");
 let buttonReferencia = document.querySelector("button");
 let emailValido = false;
 let senhaValida = false;
 
-function validarFormulario() {
+function validateLogin() {
   if (emailValido && senhaValida) {
     buttonReferencia.disabled = false;
   } else {
     buttonReferencia.disabled = true;
   }
 }
-emailReferencia.addEventListener("keyup", function () {
+
+emailReferencia.addEventListener("keyup", () => {
   emailValido = emailReferencia.checkValidity();
   if (emailValido) {
-    spanEmail.classList.remove("show");
-    validarFormulario();
-  } else spanEmail.classList.add("show");
+    spanEmailIndex.classList.remove("show");
+  } else {
+    spanEmailIndex.classList.add("show");
+  }
+  validateLogin();
 });
 
-senhaReferencia.addEventListener("keyup", function () {
+senhaReferencia.addEventListener("keyup", () => {
   senhaValida = senhaReferencia.checkValidity();
   if (senhaValida) {
     spanSenha.classList.remove("show");
-    validarFormulario();
-  } else spanSenha.classList.add("show");
+  } else {
+    spanSenha.classList.add("show");
+  }
+  validateLogin();
 });
 
 buttonReferencia.addEventListener("click", function (event) {

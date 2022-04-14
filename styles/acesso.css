@@ -47,6 +47,15 @@ input:focus {
   border: 1px solid lightgrey;
 }
 
+span {
+  opacity: 0;
+}
+
+span.show {
+  color: rgb(238, 65, 65);
+  opacity: 1;
+}
+
 label {
   width: 100%;
   font-weight: 300;

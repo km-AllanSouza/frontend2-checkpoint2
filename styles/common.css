@@ -17,15 +17,6 @@ body {
   min-height: 100vh;
 }
 
-span {
-  opacity: 0;
-}
-
-.show {
-  color: var(--secondary);
-  opacity: 1;
-}
-
 button {
   border: none;
   border-radius: 3px;

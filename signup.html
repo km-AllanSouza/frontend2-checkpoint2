@@ -26,31 +26,39 @@
 
         <label>
           Nome:
-          <input type="text" id="name"/>
+          <input type="text" id="name" required minlength="3" />
+          <span id="spanNome">Insira seu nome</span>
         </label>
         <label>
           Sobrenome:
-          <input type="text" id="lastName" />
+          <input type="text" id="lastName" required minlength="3" />
+          <span id="spanSobrenome">Insira seu sobrenome</span>
         </label>
         <label>
           Email:
-          <input type="text" id="mail"/>
+          <input type="email" id="mail" required />
+          <span id="spanEmailSignUp">Insira um email no formato correto</span>
         </label>
         <label>
           Senha:
-          <input type="password" id="passW"/>
+          <input type="password" id="passW" required minlength="8" />
+          <span id="spanSenhaSignUp"
+            >A senha deve ter pelo menos 8 caracteres</span
+          >
         </label>
         <label>
           Repetir senha:
-          <input type="password" id="passWValidation"/>
+          <input type="password" id="passWValidation" required />
+          <span id="spanPWValidationSignUp">A senha não confere</span>
         </label>
 
-        <button id="signUp">Criar conta</button>
+        <button id="signUp" disabled>Criar conta</button>
       </form>
       <div class="ingressar">
         <a href="index.html">Já possui conta? Acesse aqui</a>
       </div>
     </div>
-    <script src= './scripts/signup.js'></script>'
+    <script src="./scripts/signup.js"></script>
+    '
   </body>
 </html>
