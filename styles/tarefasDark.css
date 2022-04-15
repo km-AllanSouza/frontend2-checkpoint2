@@ -1,0 +1,244 @@
+
+ body .dark{
+    background-color: #a5a3a3;
+    min-height: 100vh;
+  }
+  .dark header {
+    display: flex;
+    background: linear-gradient(90deg, rgb(44, 44, 44), rgb(75, 72, 72));
+    box-shadow: 0px 3px 5px rgb(0, 0, 0);
+    padding: 0 3em;
+    margin-bottom: 2em;
+  }
+  .dark .user-info .user-image {
+    height: 2.5em;
+    width: 2.5em;
+    border-radius: 50%;
+    box-shadow: 2px 2px 3px rgb(185, 184, 184);
+    background-color: rgb(68, 68, 68);
+    margin-left: .7em;
+  }
+  .dark .delete-image {
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    background-color: rgb(165, 163, 163);
+    margin-left: .7em;
+  }
+  .dark #closeApp{
+    margin-left: 15px;
+    font-size: .7em;
+    background-color: rgb(250, 49, 74);
+    color: white;
+    border-radius: 50vh;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  .dark #delete-buttum{
+    margin-left: 15px;
+    font-size: .7em;
+    background-color: rgb(250, 49, 74);
+    color: white;
+    border-radius: 50vh;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  .dark #EditButtun{
+    margin-left: 15px;
+    font-size: .7em;
+    background-color: rgb(64, 99, 238);
+    color: white;
+    border-radius: 50vh;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
+.dark .nova-tarefa {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: rgb(99, 95, 95);
+    width: 80%;
+    margin: 0 10%;
+    padding: 1em;
+    box-shadow: 2px 2px 10px rgb(0, 0, 0);
+    border-radius: .2em;
+    z-index: 20;
+  }
+  .dark .nova-tarefa input[type=text] {
+    border: none;
+    background-color: rgb(99, 95, 95);
+    color: white;
+    flex: 1;
+    border-bottom: 1px solid rgb(255, 255, 255);
+    border-radius: 0;
+    padding: .3em;
+    font-size: 1.1em;
+  }
+  
+  .dark .nova-tarefa input:focus {
+    outline: none;
+    border-bottom: 1px solid grey;
+  }
+  
+  .dark .nova-tarefa input::placeholder {
+    color: rgb(255, 255, 255);
+    text-indent: .2em;
+  }
+  
+  .dark .nova-tarefa button {
+    height: 2em;
+    width: 2em;
+    background-color: transparent;
+    margin-left: 2em;
+    margin-right: 1em;
+    opacity: .5;
+    cursor: pointer;
+  }
+  
+  .dark .nova-tarefa button:hover {
+    opacity: 1;
+  }
+  
+  .dark .nova-tarefa button img {
+    height: 100%;
+    width: 100%;
+  }
+  
+  .dark .not-done {
+    width: 2em;
+    height: 2em;
+    background-color: var(--app-grey);
+    margin-right: 1em;
+    border-radius: 50%;
+    cursor: pointer;
+    text-align: center;
+    color: grey;
+  }
+  
+  /* Lista de tarefas ----------------------------------------------------------- */
+  
+  .dark .tarefas-pendentes {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    list-style: none;
+    margin: 2em 15%;
+  }
+  
+  .dark .tarefa {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5em;
+  }
+  
+  .dark .tarefa .not-done {
+    position: relative;
+    height: 1.5em;
+    width: 1.5em;
+    background-color: var(--app-grey);
+    box-shadow: 2px 2px 5px rgb(143, 141, 141);
+    border: 2px solid black;
+    z-index: 2;
+    transition: background-color 200ms linear;
+  }
+  
+  .dark .tarefa .not-done:hover {
+    background-color: black;
+  }
+  
+  .dark .tarefa:first-child .not-done::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: calc(.75em - 1px);
+    display: block;
+    height: 3em;
+    width: 2px;
+    background-color: black;
+  }
+  
+  .dark .tarefa:not(:last-child) .not-done::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: calc(.75em - 1px);
+    display: block;
+    height: 4.5em;
+    width: 2px;
+    background-color: black;
+  }
+  
+  .dark .tarefa .descricao {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    background-color: rgb(98, 95, 95);
+    padding: 1em 2em;
+    box-shadow: 2px 2px 5px rgb(3, 3, 3);
+  }
+  
+  .dark .tarefa .right {
+    display: flex;
+      
+  }
+  
+  .dark .tarefa .nome {
+    color: rgb(255, 255, 255);
+  }
+  
+  .dark .tarefa .timestamp {
+    
+    font-size: .9em;
+    color: rgb(255, 255, 255);
+  }
+  
+  /* Tarefas terminadas ----------------------------------------------------------- */
+  
+  .dark .titulo-terminadas {
+    position: relative;
+    width: 8em;
+    text-align: center;
+    padding: .5em 1em;
+    background-color: rgb(136, 136, 136);
+    border-radius: .2em;
+    box-shadow: 3px 3px 5px rgb(27, 27, 27);
+    color: rgb(255, 255, 255);
+    font-weight: 400;
+    font-size: 1.1em;
+    margin-left: calc(15% - 4em);
+    z-index: 20;
+  }
+  
+  .dark .tarefas-terminadas {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    list-style: none;
+    margin: 2em 15%;
+  }
+  
+  .dark .tarefas-terminadas i{
+    color: grey;
+    background-color: rgb(228, 228, 228);
+  }
+  .dark .tarefas-terminadas button{
+    margin-left: 10px;
+  }
+  
+  .dark .tarefas-terminadas .tarefa .descricao {
+    background-color: rgb(0, 0, 0);
+    color: grey;
+  }
+  
+  .dark .tarefas-terminadas .tarefa .descricao .nome {
+    color: grey;
+    text-decoration: line-through;
+  }  
+  .dark .tarefas-terminadas .timestamp {
+    
+    color: grey;
+    text-decoration: line-through;
+  }
+ 

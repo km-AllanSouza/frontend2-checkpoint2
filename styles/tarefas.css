@@ -254,6 +254,12 @@ a {
   color: grey;
   text-decoration: line-through;
 }
+.tarefas-terminadas .timestamp {
+  
+
+  color: grey;
+  text-decoration: line-through;
+}
 
 #skeleton .descricao{
   background-color: rgb(189, 189, 189);

@@ -117,6 +117,13 @@ buttonRef.addEventListener("click", event => {
   ).then(response => {
     response.json().then(data => {
       console.log(data);
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Usuario Cadastrado com sucesso',
+        showConfirmButton: false,
+        timer: 800
+      })
     });
   });
 });

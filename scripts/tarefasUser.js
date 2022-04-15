@@ -6,20 +6,32 @@ let ulTarefasRef = document.querySelector('.tarefas-pendentes')
 let ulTarefasTerminadasRef = document.querySelector('.tarefas-terminadas')
 let novaTarefaRef = document.querySelector('#novaTarea')
 let imagem = document.querySelector('.user-image')
+
+
+
+//Variavel de configuração dos herder utilizado nas requisições da API
 let requestHeaders = {
     "Content-Type": "application/json",
     Authorization: localStorage.getItem("token")
 }
-let taskList = []
-let tasksCompletedList = []
-console.log(taskList)
-console.log(tasksCompletedList)
 
-//faz o logout da pagina de tarefas
+let requestConfigurationGet = {
+    headers: requestHeaders
+};
+
+
+
+let taskList = [] // Variavel de armazenamento das tasks pendentes
+let tasksCompletedList = []// Variavel de armazenamento das tasks Concluidas
+
+
+//faz o logout do usuario
 function logOutUser() {
     localStorage.clear();
     window.location.href = "./index.html";
 }
+
+// faz a requisição get para redenrização da pagina apos realização das tarefas.
 function atualizararray(){
     taskList = []
     tasksCompletedList = []
@@ -41,6 +53,8 @@ function atualizararray(){
        
     });
 }
+
+//Responsavel por redenrizar a pagina apos cada ação
 function taskRender() {
    
     
@@ -71,6 +85,8 @@ function taskRender() {
             </div>
           </li>`    
     }
+
+
     for (const task of tasksCompletedList) {
         const dataCreat = new Date(task.createdAt)
         const dataFormatada = dataCreat.toLocaleDateString(
@@ -95,6 +111,7 @@ function taskRender() {
     
 }
 
+// Responsavel por realizar a adição de novas tasks
 function creatTask() {
 
     let newTask = {
@@ -121,6 +138,8 @@ function creatTask() {
     });
    
 }
+
+//Responsavel por retorna a task de concluida para pendente
 function taskCompletedReturn(id) {
     
     let taskCompletedReturn = {
@@ -147,12 +166,14 @@ function taskCompletedReturn(id) {
             showConfirmButton: false,
             timer: 800
           })
-        //alert('Tarefa de volta para pendentes')
+        
     });
-    //location.reload()
+
     
    
 }
+
+//Responsavel por mover a task de pendente para concluida
 function taskCompleted(id) {
     
     let taskCompleted = {
@@ -186,100 +207,101 @@ function taskCompleted(id) {
    
 }
 
-
+// Responsavel por editar a task
 function EditTarefa(idValue) {
-    //let edit = prompt('Editar tarefa')
-     
-Swal.fire({
-    title: 'Substitua sua tarefa',
-    input: 'text',
-    inputAttributes: {
-      autocapitalize: 'off'
-    },
-    showCancelButton: true,
-    confirmButtonText: 'Substituir',
-    showLoaderOnConfirm: true,
-    preConfirm: (login) => {
-        console.log(login)
-        if(login){
+         
+    Swal.fire({
+        title: 'Substitua sua tarefa',
+        input: 'text',
+        confirmButtonColor: '#7A93F9',
+        cancelButtonColor: '#FA314A',
+        inputAttributes: {
+        autocapitalize: 'off'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Substituir',
+        showLoaderOnConfirm: true,
+        preConfirm: (login) => {
+            console.log(login)
+            if(login){
 
-            let EditTask = {
-                description: login,
-                completed: false
-            }
-            
-            let requestConfigurationPut = {
-                method: "PUT",
-                body: JSON.stringify(EditTask),
-                headers: requestHeaders
-            }
-        
-            fetch(
-                `https://ctd-todo-api.herokuapp.com/v1/tasks/${idValue}`,
-                requestConfigurationPut
-            ).then(response => {
-                response.json().then(data=>{
-                    
-                    atualizararray()
-                    //alert('Tarefa Editada Com sucesso!')
-                    //location.reload()
-                })
+                let EditTask = {
+                    description: login,
+                    completed: false
+                }
                 
-                
-                
-            });
-    
-        }
-    },
-    
-  }) 
-    
-    
-    
-    
-   
-}
-
-let requestConfigurationGet = {
-    headers: requestHeaders
-};
-
-
-
-function excluir(idValue){
-    //if(confirm("Deseja realmente excluir a tarefa?")){
-        Swal.fire({
-            title: 'Você tem certeza?',
-            text: "Não vai ser possivel reverter essa ação!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sim, delete!'
-          }).then((result) => {
-            if (result.isConfirmed) {
-                let settingDelete = {
-                    method: "DELETE",
+                let requestConfigurationPut = {
+                    method: "PUT",
+                    body: JSON.stringify(EditTask),
                     headers: requestHeaders
                 }
             
-                fetch(`https://ctd-todo-api.herokuapp.com/v1/tasks/${idValue}`, settingDelete).then(response =>{
-            
-                    response.json().then(data =>{      
+                fetch(
+                    `https://ctd-todo-api.herokuapp.com/v1/tasks/${idValue}`,
+                    requestConfigurationPut
+                ).then(response => {
+                    response.json().then(data=>{
                         
-                        //taskList = taskList.filter(i =>{return i["id"] !== idValue})
                         atualizararray()
+                        //alert('Tarefa Editada Com sucesso!')
+                        //location.reload()
                     })
-            
-                })
-              
+                    
+                    
+                    
+                });
+        
             }
-          })
+        },
+        
+    }) 
+    
+  
+}
+
+// Responsavel por excluir a task
+function excluir(idValue){
+    
+    Swal.fire({
+        title: 'Você tem certeza?',
+        text: "Não vai ser possivel reverter essa ação!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#7A93F9',
+        cancelButtonColor: '#FA314A',
+        confirmButtonText: 'Sim, delete!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            let settingDelete = {
+                method: "DELETE",
+                headers: requestHeaders
+            }
+        
+            fetch(`https://ctd-todo-api.herokuapp.com/v1/tasks/${idValue}`, settingDelete).then(response =>{
+        
+                response.json().then(data =>{      
+                    
+                    //taskList = taskList.filter(i =>{return i["id"] !== idValue})
+                    atualizararray()
+                })
+        
+            })
+            
+        }
+        })
         
 
-    }  
+}  
 
-//}
+//REsponsavel por mudar o tema de claro para escuro e virse-versa
+function modoDark(){
+    
+    let BoryDarkReference = document.querySelector('.d-dark')
+    BoryDarkReference.classList.toggle('dark')
+}
+
+//REsponsavel por pegar os nome do usuario e exibir-----------------------------------------------------------------------------------------------------------------------------------------
+
 
 fetch(
     "https://ctd-todo-api.herokuapp.com/v1/users/getMe",
@@ -290,49 +312,51 @@ fetch(
     });
 });
 
-    fetch('https://randomuser.me/api/')
-    .then(response => {
-        return response.json()
-    })
-    .then(data => {
-        console.log(data.results[0].picture.thumbnail)
-        imagem.setAttribute("src", data.results[0].picture.thumbnail)
+//REsponsavel por pegar uma foto atravez de outra API e exibir---------------------------------------------------------------------------------------------------------------------------
+fetch('https://randomuser.me/api/')
+.then(response => {
+    return response.json()
+})
+.then(data => {
+    console.log(data.results[0].picture.thumbnail)
+    imagem.setAttribute("src", data.results[0].picture.thumbnail)
 
-    })
+})
 
-atualizar()
-function atualizar(){
-    
-
-    fetch(
-        "https://ctd-todo-api.herokuapp.com/v1/tasks",
-        requestConfigurationGet
-    ).then(response => {
-        response.json().then(data => {
+//Responsavel por fazer o a solicitação Get ao logar e chama a função taskRender() para redenrizar a tela quando o usuaario loga---------------------------------------------------------
+fetch(
+    "https://ctd-todo-api.herokuapp.com/v1/tasks",
+    requestConfigurationGet
+).then(response => {
+    response.json().then(data => {
+        
+            for (const task of data) {
             
-                for (const task of data) {
-                
-                if(task.completed){
-                    tasksCompletedList.push(task)
-                }else taskList.push(task)
-    
-            }
-                
-            skeletonRef.style.display = "none";
-            taskRender()            
-        });
-        taskRender()
+            if(task.completed){
+                tasksCompletedList.push(task)
+            }else taskList.push(task)
+
+        }
+            
+        skeletonRef.style.display = "none";
+        taskRender()            
     });
+    taskRender()
+});
 
-}
 
+//Responsavel por escutar o botão nova tarefa e disparar uma ação-----------------------------------------------------------------------------------------------------------------------------
   
 newTaskRef.addEventListener('click', event => {
     
 event.preventDefault()
 if(novaTarefaRef.value == ""){
     novaTarefaRef.focus()
-    Swal.fire('Digite a descrição da tarefa no campo nova tarefa')
+    Swal.fire(
+        {title: 'Digite a descrição da tarefa no campo nova tarefa',
+        confirmButtonColor: '#7A93F9',
+        })
+    
     
 }else{
     event.preventDefault()
@@ -341,7 +365,8 @@ if(novaTarefaRef.value == ""){
 }
     
     
-    
+//Responsavel por escutar o botão logout e disparar uma ação-----------------------------------------------------------------------------------------------------------------------------
+      
 })
 
 closeAppRef.addEventListener('click', () => {

@@ -34,6 +34,13 @@ buttonLoginRef.addEventListener("click", event => {
         window.location.href = './tarefas.html'
 
       })
-    } else alert('login e/ou senha invalido(s)')
+    } else {
+        Swal.fire({
+          title: 'Usuario não encontrado',
+          text: "e-mail ou senha incorreto",
+          icon: 'warning',
+          
+      })
+    }
   });
 });
