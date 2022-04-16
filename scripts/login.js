@@ -35,11 +35,11 @@ buttonLoginRef.addEventListener("click", event => {
 
       })
     } else {
-        Swal.fire({
-          title: 'Usuario não encontrado',
-          text: "e-mail ou senha incorreto",
-          icon: 'warning',
-          
+      Swal.fire({
+        title: 'Usuario não encontrado',
+        text: "e-mail ou senha incorreto",
+        icon: 'warning',
+
       })
     }
   });
