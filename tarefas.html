@@ -38,12 +38,12 @@
 
     <div class="user-info">
       <p id="userName">Nome usuário</p>
-      <img class="user-image">
+      <img class="user-image" onclick="pokeImg()">
       <p id="closeApp">Finalizar sessão</i>
       </p>
       <label class="switch">
         <!-- OnChnaged -> Fica obervando 'mudanças' no comportamento do input -->
-        <input  type="checkbox" onchange="modoDark()">
+        <input  type="checkbox" id="darkMod" onchange="modoDark()">
         <span class="slider"></span>
       </label>
     </div>
